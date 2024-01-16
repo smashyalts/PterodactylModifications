@@ -19,5 +19,5 @@ Do this as root to have proper permissions
 
 Pagination:  
 Download FileManagerContainer.tsx  
-Replace /www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx with the downloaded file  
+Replace /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx with the downloaded file  
 then run *yarn build:production*  
