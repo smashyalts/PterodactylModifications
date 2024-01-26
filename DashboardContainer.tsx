@@ -16,156 +16,106 @@ import { useLocation } from 'react-router-dom';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-const Folder = ({ folderName, servers, onDrop }: any) => {
-  const [{ isOver }, dropRef] = useDrop({
-    accept: 'SERVER',
-    drop: (item: any) => onDrop(item.uuid, folderName),
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
-  });
+const Folder = ({ name, servers, addServer }) => {
+    const [isOpen, setIsOpen] = useState(true);
 
-  return (
-    <div>
-      <div ref={dropRef}>
-        <p>{folderName}</p>
-        {isOver && <div style={{ height: '10px', background: 'yellow' }}></div>}
-      </div>
-      {servers.map((server: any) => (
-        <div key={server.uuid} style={{ margin: '5px' }}>
-          <p>{server.name}</p>
-          {server.folder && <p>Folder: {server.folder}</p>}
-        </div>
-      ))}
-    </div>
-  );
-};
+    const [, drop] = useDrop({
+        accept: 'server',
+        drop: (item) => addServer(item.server),
+    });
 
-const ServerDraggable = ({ server }: { server: Server }) => {
-  const [, dragRef] = useDrag({
-    type: 'SERVER',
-    item: { uuid: server.uuid },
-  });
-
-  return (
-    <div ref={dragRef}>
-      <p>{server.name}</p>
-      {server.folder && <p>Folder: {server.folder}</p>}
-    </div>
-  );
+    return (
+        <FolderContainer ref={drop}>
+            <FolderButton onClick={() => setIsOpen(!isOpen)}>{name}</FolderButton>
+            {isOpen && servers.map((server, index) => (
+                <ServerRow key={server.uuid} server={server} css={index > 0 ? tw`mt-2` : undefined} />
+            ))}
+        </FolderContainer>
+    );
 };
 
 export default () => {
-  const { search } = useLocation();
-  const defaultPage = Number(new URLSearchParams(search).get('page') || '1');
+    const { search } = useLocation();
+    const defaultPage = Number(new URLSearchParams(search).get('page') || '1');
 
-  const [page, setPage] = useState(!isNaN(defaultPage) && defaultPage > 0 ? defaultPage : 1);
-  const { clearFlashes, clearAndAddHttpError } = useFlash();
-  const uuid = useStoreState((state) => state.user.data!.uuid);
-  const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
-  const [showOnlyAdmin, setShowOnlyAdmin] = usePersistedState(`${uuid}:show_all_servers`, false);
+    const [page, setPage] = useState(!isNaN(defaultPage) && defaultPage > 0 ? defaultPage : 1);
+    const { clearFlashes, clearAndAddHttpError } = useFlash();
+    const uuid = useStoreState((state) => state.user.data!.uuid);
+    const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
+    const [showOnlyAdmin, setShowOnlyAdmin] = usePersistedState(`${uuid}:show_all_servers`, false);
+    const [folders, setFolders] = usePersistedState(`${uuid}:folders`, []);
+    const [newFolderName, setNewFolderName] = useState('');
 
-  const { data: servers, error } = useSWR<PaginatedResult<Server>>(
-    ['/api/client/servers', showOnlyAdmin && rootAdmin, page],
-    () => getServers({ page, type: showOnlyAdmin && rootAdmin ? 'admin' : undefined })
-  );
+    const { data: servers, error } = useSWR<PaginatedResult<Server>>(
+        ['/api/client/servers', showOnlyAdmin && rootAdmin, page],
+        () => getServers({ page, type: showOnlyAdmin && rootAdmin ? 'admin' : undefined })
+    );
 
-  const [folders, setFolders] = useState<Record<string, Server[]>>({});
+    const addFolder = () => {
+        setFolders([...folders, { name: newFolderName, servers: [] }]);
+        setNewFolderName('');
+    };
 
-  const [newFolderName, setNewFolderName] = useState('');
+    const addServerToFolder = (folderIndex) => (server) => {
+        setFolders(folders.map((folder, index) => index === folderIndex ? { ...folder, servers: [...folder.servers, server] } : folder));
+    };
 
-const toggleFolderVisibility = (folderName: string) => {
- setFolders((prevFolders) => {
-    const updatedFolders: Record<string, Server[]> = { ...prevFolders };
+    useEffect(() => {
+        if (!servers) return;
+        if (servers.pagination.currentPage > 1 && !servers.items.length) {
+            setPage(1);
+        }
+    }, [servers?.pagination.currentPage]);
 
-    if (updatedFolders[folderName]) {
-      updatedFolders[folderName] = updatedFolders[folderName].length === 0 ? [] : [];
-    } else {
-      updatedFolders[folderName] = [];
-    }
+    useEffect(() => {
+        window.history.replaceState(null, document.title, `/${page <= 1 ? '' : `?page=${page}`}`);
+    }, [page]);
 
-    return updatedFolders;
- });
-};
+    useEffect(() => {
+        if (error) clearAndAddHttpError({ key: 'dashboard', error });
+        if (!error) clearFlashes('dashboard');
+    }, [error]);
 
-  const handleDrop = (serverUuid: string, folderName: string) => {
-    console.log(`Server ${serverUuid} dropped into folder ${folderName}`);
-  };
-
-  const handleCreateFolder = () => {
-    if (newFolderName.trim() !== '') {
-      setFolders((prevFolders) => ({
-        ...prevFolders,
-        [newFolderName]: [],
-      }));
-      setNewFolderName('');
-    }
-  };
-
-  useEffect(() => {
-    if (!servers) return;
-    if (servers.pagination.currentPage > 1 && !servers.items.length) {
-      setPage(1);
-    }
-  }, [servers?.pagination.currentPage]);
-
-  useEffect(() => {
-
-    window.history.replaceState(null, document.title, `/${page <= 1 ? '' : `?page=${page}`}`);
-  }, [page]);
-
-  useEffect(() => {
-    if (error) clearAndAddHttpError({ key: 'dashboard', error });
-    if (!error) clearFlashes('dashboard');
-  }, [error]);
-
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
-        {rootAdmin && (
-          <div css={tw`mb-2 flex justify-end items-center`}>
-            <p css={tw`uppercase text-xs text-neutral-400 mr-2`}>
-              {showOnlyAdmin ? "Showing others' servers" : 'Showing your servers'}
-            </p>
-            <Switch
-              name={'show_all_servers'}
-              defaultChecked={showOnlyAdmin}
-              onChange={() => setShowOnlyAdmin((s) => !s)}
-            />
-          </div>
-        )}
-
-        <div css={tw`mb-2 flex items-center`}>
-          <input
-            type="text"
-            value={newFolderName}
-            onChange={(e) => setNewFolderName(e.target.value)}
-            placeholder="Enter folder name"
-            css={tw`mr-2 p-2 border border-neutral-300 rounded`}
-          />
-          <button onClick={handleCreateFolder} css={tw`px-4 py-2 bg-green-500 text-white rounded`}>
-            Create Folder
-          </button>
-        </div>
-
-        {!servers ? (
-          <Spinner centered size={'large'} />
-        ) : (
-          <div>
-            {Object.entries(folders).map(([folderName, folderServers]) => (
-              <Folder
-                key={folderName}
-                folderName={folderName}
-                servers={folderServers}
-                onDrop={handleDrop}
-              />
-            ))}
-            {servers.items.map((server, index) => (
-              <ServerDraggable key={server.uuid} server={server} css={index > 0 ? tw`mt-2` : undefined} />
-            ))}
-          </div>
-        )}
-      </PageContentBlock>
-    </DndProvider>
-  );
+    return (
+        <DndProvider backend={HTML5Backend}>
+            <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
+                {rootAdmin && (
+                    <div css={tw`mb-2 flex justify-end items-center`}>
+                        <p css={tw`uppercase text-xs text-neutral-400 mr-2`}>
+                            {showOnlyAdmin ? "Showing others' servers" : 'Showing your servers'}
+                        </p>
+                        <Switch
+                            name={'show_all_servers'}
+                            defaultChecked={showOnlyAdmin}
+                            onChange={() => setShowOnlyAdmin((s) => !s)}
+                        />
+                    </div>
+                )}
+                <input value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)} />
+                <button onClick={addFolder}>Create Folder</button>
+                {folders.map((folder, index) => (
+                    <Folder key={index} name={folder.name} servers={folder.servers} addServer={addServerToFolder(index)} />
+                ))}
+                {!servers ? (
+                    <Spinner centered size={'large'} />
+                ) : (
+                    <Pagination data={servers} onPageSelect={setPage}>
+                        {({ items }) =>
+                            items.length > 0 ? (
+                                items.map((server, index) => (
+                                    <ServerRow key={server.uuid} server={server} css={index > 0 ? tw`mt-2` : undefined} />
+                                ))
+                            ) : (
+                                <p css={tw`text-center text-sm text-neutral-400`}>
+                                    {showOnlyAdmin
+                                        ? 'There are no other servers to display.'
+                                        : 'There are no servers associated with your account.'}
+                                </p>
+                            )
+                        }
+                    </Pagination>
+                )}
+            </PageContentBlock>
+        </DndProvider>
+    );
 };
