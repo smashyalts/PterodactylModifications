@@ -1,5 +1,5 @@
 #!/bin/bash
-echo I am not liable for any damage caused by this script, backups will be automatically made, named FileBackup.tsx and DashboardBackup.tsx
+echo I am not liable for any damage caused by this script, backups of files directly modified by this script will be automatically made, named FileBackup.tsx and DashboardBackup.tsx
 echo Type 1 for Server sort, 2 for Pagination, 3 for both
 read -p 'Option: ' number
 
