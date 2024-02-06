@@ -17,19 +17,19 @@ if number = 1
 then   
  yarn add react-beautiful-dnd
  cp /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx DashboardBackup.tsx
- curl https://www.dropbox.com/scl/fi/5mdgeh0e596i6h76d6apy/DashboardContainer.tsx?rlkey=hwexoub3l63isxag31g577q71 -o /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
+ curl https://www.dropbox.com/scl/fi/5mdgeh0e596i6h76d6apy/DashboardContainer.tsx?rlkey=hwexoub3l63isxag31g577q71 > /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
 fi
 elif number = 2 
 then
  cp /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx
- curl https://www.dropbox.com/scl/fi/1x6ma2ww4x24v0w9equ2n/FileManagerContainer.tsx?rlkey=bvk8gj7qxqietg54gggot71dc -o /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx
+ curl https://www.dropbox.com/scl/fi/1x6ma2ww4x24v0w9equ2n/FileManagerContainer.tsx?rlkey=bvk8gj7qxqietg54gggot71dc > /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx
  fi
 elif number = 3
 then 
  cp /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx
  cp /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx DashboardBackup.tsx
- curl https://www.dropbox.com/scl/fi/5mdgeh0e596i6h76d6apy/DashboardContainer.tsx?rlkey=hwexoub3l63isxag31g577q71 -o /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
- curl https://www.dropbox.com/scl/fi/1x6ma2ww4x24v0w9equ2n/FileManagerContainer.tsx?rlkey=bvk8gj7qxqietg54gggot71dc -o /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx
+ curl https://www.dropbox.com/scl/fi/5mdgeh0e596i6h76d6apy/DashboardContainer.tsx?rlkey=hwexoub3l63isxag31g577q71 > /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
+ curl https://www.dropbox.com/scl/fi/1x6ma2ww4x24v0w9equ2n/FileManagerContainer.tsx?rlkey=bvk8gj7qxqietg54gggot71dc > /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx
  yarn add react-beautiful-dnd 
 fi
 
