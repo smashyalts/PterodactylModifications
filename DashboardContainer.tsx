@@ -12,7 +12,7 @@ import tw from 'twin.macro';
 import useSWR from 'swr';
 import { PaginatedResult } from '@/api/http';
 import { useLocation } from 'react-router-dom';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
 export default () => {
   const [allowDragDrop, setAllowDragDrop] = useState(true);
@@ -73,7 +73,7 @@ export default () => {
     localStorage.setItem(`serversOrder:${uuid}`, JSON.stringify(serversOrder));
   }, [serversOrder]);
 
-  const onDragEnd = (result) => {
+  const onDragEnd = (result: DropResult ) => {
     const { source, destination } = result;
 
     if (!destination) {
@@ -95,11 +95,7 @@ export default () => {
           <p css={tw`uppercase text-xs text-neutral-400 mr-2`}>
             {showOnlyAdmin ? "Showing others' servers" : 'Showing your servers'}
           </p>
-<Switch 
-  name={'show_all_servers'} 
-  defaultChecked={showOnlyAdmin} 
-  onChange={() => setShowOnlyAdmin(s => !s)} 
-  />
+<Switch name={'show_all_servers'} defaultChecked={showOnlyAdmin} onChange={() => setShowOnlyAdmin(s => !s)} />
         </div>
       )}
       <div css={tw`mb-2 flex justify-end items-center`}>
@@ -108,7 +104,7 @@ export default () => {
         </p>
         <Switch
           name={'allow_drag_drop'}
-          checked={allowDragDrop}
+          defaultChecked={!allowDragDrop}
           onChange={() => setAllowDragDrop(!allowDragDrop)}
         />
       </div>
