@@ -21,3 +21,10 @@ Pagination:
 Download FileManagerContainer.tsx  
 Replace /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx with the downloaded file  
 then run *yarn build:production*  
+
+
+Server Sort:  
+Download DashboardContainer.tsx
+Replace /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx with the downloaded file  
+then run *yarn add react-beautiful-dnd*
+then *yarn build:production*  
