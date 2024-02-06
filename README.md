@@ -1,4 +1,5 @@
-File Limit Changer and Pagination for Pterodactyl  
+File Limit Changer, Pagination, and Server Sorting! for Pterodactyl
+Feel free to donate to my Paypal at: classicheroestv@gmail.com
 
 YOU CAN NOT USE BOTH AT THE SAME TIME  
 Pagination completely bypasses the file limit, and after every 250 files a new page is created  
