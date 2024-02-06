@@ -95,11 +95,11 @@ export default () => {
           <p css={tw`uppercase text-xs text-neutral-400 mr-2`}>
             {showOnlyAdmin ? "Showing others' servers" : 'Showing your servers'}
           </p>
-          <Switch
-            name={'show_all_servers'}
-            checked={!showOnlyAdmin}
-            onChange={() => setShowOnlyAdmin(!showOnlyAdmin)}
-          />
+<Switch 
+  name={'show_all_servers'} 
+  defaultChecked={showOnlyAdmin} 
+  onChange={() => setShowOnlyAdmin(s => !s)} 
+  />
         </div>
       )}
       <div css={tw`mb-2 flex justify-end items-center`}>
