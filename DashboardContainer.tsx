@@ -16,6 +16,7 @@ import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautif
 import { get, set } from 'idb-keyval';
 
 export default () => {
+  const [allowDragDrop, setAllowDragDrop] = useState(true);
   const { search } = useLocation();
   const defaultPage = Number(new URLSearchParams(search).get('page') || '1');
 
@@ -103,8 +104,20 @@ export default () => {
     checked={!showOnlyAdmin}
     onChange={() => setShowOnlyAdmin(!showOnlyAdmin)}
 />
+
         </div>
       )}
+              <div css={tw`mb-2 flex justify-end items-center`}>
+          <p css={tw`uppercase text-xs text-neutral-400 mr-2`}>
+            {allowDragDrop ? "Sorting Mode Disabled" : 'Sorting Mode Enabled'}
+          </p>
+          <Switch
+  name={'allow_drag_drop'}
+  checked={allowDragDrop}
+  onChange={() => setAllowDragDrop(!allowDragDrop)}
+/>
+
+        </div>
       {!servers ? (
         <Spinner centered size={'large'} />
       ) : (
@@ -119,7 +132,7 @@ export default () => {
                     return null;
                   }
                   return (
-                    <Draggable key={server.uuid} draggableId={server.uuid} index={index}>
+                    <Draggable key={server.uuid} draggableId={server.uuid} index={index} isDragDisabled={allowDragDrop}>
                       {(provided) => (
                         <div
                           ref={provided.innerRef}
