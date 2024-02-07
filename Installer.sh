@@ -17,7 +17,9 @@ yarn # Installs panel build dependencies
 
 if [ "$number" -eq "1" ]; then
   cp /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx DashboardBackup.tsx
+  cd /var/www/pterodactyl
   yarn add react-beautiful-dnd
+  npm i --save-dev @types/react-beautiful-dnd
   curl -L -f https://www.dropbox.com/scl/fi/jj6sevck4ii9jbf9mqor0/DashboardContainer.tsx?rlkey=e1zbwj2lg2yf2k9ji5c1ut82n > /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
 elif [ "$number" -eq "2" ]; then
   cp /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx FileBackup.tsx
@@ -25,6 +27,9 @@ elif [ "$number" -eq "2" ]; then
 elif [ "$number" -eq "3" ]; then
   cp /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx FileBackup.tsx
   cp /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx DashboardBackup.tsx
+  cd /var/www/pterodactyl
+  yarn add react-beautiful-dnd
+  npm i --save-dev @types/react-beautiful-dnd
   curl -L -f https://www.dropbox.com/scl/fi/jj6sevck4ii9jbf9mqor0/DashboardContainer.tsx?rlkey=e1zbwj2lg2yf2k9ji5c1ut82n > /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
   curl -L -f https://www.dropbox.com/scl/fi/1x6ma2ww4x24v0w9equ2n/FileManagerContainer.tsx?rlkey=bvk8gj7qxqietg54gggot71dc > /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx
   yarn add react-beautiful-dnd
