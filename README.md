@@ -28,5 +28,6 @@ Server Sort:
 Download DashboardContainer.tsx
 Replace /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx with the downloaded file  
 then run *yarn add react-beautiful-dnd*
+then run *yarn add @types/react-beautiful-dnd --dev*
 then *yarn build:production*  
 (or use the installer)
