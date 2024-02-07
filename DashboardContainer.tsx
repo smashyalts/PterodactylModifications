@@ -62,7 +62,7 @@ export default () => {
     if (!servers) return;
     const newOrder = servers.items.map((server) => server.uuid);
     
-    if (!localStorage.getItem(`serversOrder:${uuid}`)) {
+    if (!localStorage.getItem(`serversOrder:${uuid}`) || newOrder.length !== serversOrder.length) {
       setServersOrder(newOrder);
       localStorage.setItem(`serversOrder:${uuid}`, JSON.stringify(newOrder));
     }
