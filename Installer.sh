@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "I am not liable for any damage caused by this script, backups of files directly modified by this script will be automatically made, named FileBackup.tsx and DashboardBackup.tsx"
+echo "This script only works on NodeJS 16 (lower possibly works but hasn't been tested), unless you have followed https://pterodactyl.io/community/customization/panel.html#build-panel-assets at least once"
 echo "Type 1 for Server sort, 2 for Pagination, 3 for both"
 read -p 'Option: ' number
 
@@ -14,11 +16,15 @@ cd /var/www/pterodactyl
 yarn # Installs panel build dependencies
 
 if [ "$number" -eq "1" ]; then
+  cp /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx DashboardBackup.tsx
   yarn add react-beautiful-dnd
   curl -L -f https://www.dropbox.com/scl/fi/5mdgeh0e596i6h76d6apy/DashboardContainer.tsx?rlkey=hwexoub3l63isxag31g577q71 > /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
 elif [ "$number" -eq "2" ]; then
+  cp /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx FileBackup.tsx
   curl -L -f https://www.dropbox.com/scl/fi/1x6ma2ww4x24v0w9equ2n/FileManagerContainer.tsx?rlkey=bvk8gj7qxqietg54gggot71dc > /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx
 elif [ "$number" -eq "3" ]; then
+  cp /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx FileBackup.tsx
+  cp /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx DashboardBackup.tsx
   curl -L -f https://www.dropbox.com/scl/fi/5mdgeh0e596i6h76d6apy/DashboardContainer.tsx?rlkey=hwexoub3l63isxag31g577q71 > /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
   curl -L -f https://www.dropbox.com/scl/fi/1x6ma2ww4x24v0w9equ2n/FileManagerContainer.tsx?rlkey=bvk8gj7qxqietg54gggot71dc > /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx
   yarn add react-beautiful-dnd
