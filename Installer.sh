@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "I am not liable for any damage caused by this script, backups of files directly modified by this script will be automatically made, named FileBackup.tsx and DashboardBackup.tsx"
-echo "This script only works on NodeJS 16 (lower possibly works but hasn't been tested), NodeJS 17 isnt supported OOB unless you have followed https://pterodactyl.io/community/customization/panel.html#build-panel-assets at least once"
+echo "This script only works on NodeJS 16 (lower possibly works but hasn't been tested), NodeJS 17+ isnt supported OOB unless you have ran export NODE_OPTIONS=--openssl-legacy-provider at least once"
 echo "Type 1 for Server sort, 2 for Pagination, 3 for both"
 read -p 'Option: ' number
 
