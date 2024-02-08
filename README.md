@@ -1,7 +1,7 @@
 File Limit Changer, Pagination, and Server Sorting! for Pterodactyl
 Feel free to donate to my Paypal at: classicheroestv@gmail.com
 
-YOU CAN NOT USE BOTH AT THE SAME TIME  
+YOU CAN NOT USE BOTH AT THE SAME Time (limit changer and pagination are incompatible with each other, they both work fine with server sorting)
 Pagination completely bypasses the file limit, and after every 250 files a new page is created  
 You need to have followed https://pterodactyl.io/community/customization/panel.html
 atleast once.
