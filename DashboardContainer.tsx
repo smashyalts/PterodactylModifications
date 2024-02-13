@@ -46,47 +46,64 @@ export default () => {
     if (!error) clearFlashes('dashboard');
   }, [error]);
 
-  const [serversOrder, setServersOrder] = useState<string[]>([]);
+const [adminServersOrder, setAdminServersOrder] = useState<string[]>([]);
+const [nonAdminServersOrder, setNonAdminServersOrder] = useState<string[]>([]);
 
-  useEffect(() => {
-    const loadServersOrder = () => {
-      const savedOrder = localStorage.getItem(`serversOrder:${uuid}`);
-      console.log('Loaded order from localStorage:', savedOrder);
-      setServersOrder(savedOrder ? JSON.parse(savedOrder) : []);
-    };
 
-    loadServersOrder();
-  }, [uuid]);
+useEffect(() => {
+  const adminSavedOrder = localStorage.getItem(`admin:serversOrder:${uuid}`);
+  const nonAdminSavedOrder = localStorage.getItem(`nonadmin:serversOrder:${uuid}`);
+  setAdminServersOrder(adminSavedOrder ? JSON.parse(adminSavedOrder) : []);
+  setNonAdminServersOrder(nonAdminSavedOrder ? JSON.parse(nonAdminSavedOrder) : []);
+}, [uuid]);
 
-  useEffect(() => {
-    if (!servers) return;
-    const newOrder = servers.items.map((server) => server.uuid);
-    
-    if (!localStorage.getItem(`serversOrder:${uuid}`) || newOrder.length !== serversOrder.length) {
-      setServersOrder(newOrder);
-      localStorage.setItem(`serversOrder:${uuid}`, JSON.stringify(newOrder));
+
+useEffect(() => {
+  if (!servers) return;
+  const newOrder = servers.items.map((server) => server.uuid);
+
+  if (showOnlyAdmin) {
+    if (!localStorage.getItem(`admin:serversOrder:${uuid}`) || newOrder.length !== adminServersOrder.length) {
+      setAdminServersOrder(newOrder);
+      localStorage.setItem(`admin:serversOrder:${uuid}`, JSON.stringify(newOrder));
     }
-  }, [servers, uuid]);
-
-  useEffect(() => {
-    console.log('Saving servers order to localStorage');
-    localStorage.setItem(`serversOrder:${uuid}`, JSON.stringify(serversOrder));
-  }, [serversOrder]);
-
-  const onDragEnd = (result: DropResult ) => {
-    const { source, destination } = result;
-
-    if (!destination) {
-      return;
+  } else {
+    if (!localStorage.getItem(`nonadmin:serversOrder:${uuid}`) || newOrder.length !== nonAdminServersOrder.length) {
+      setNonAdminServersOrder(newOrder);
+      localStorage.setItem(`nonadmin:serversOrder:${uuid}`, JSON.stringify(newOrder));
     }
+  }
+}, [servers, uuid, showOnlyAdmin]);
 
-    const newOrder = Array.from(serversOrder);
-    newOrder.splice(source.index, 1);
-    newOrder.splice(destination.index, 0, serversOrder[source.index]);
 
-    setServersOrder(newOrder);
-    localStorage.setItem(`serversOrder:${uuid}`, JSON.stringify(newOrder));
-  };
+useEffect(() => {
+  localStorage.setItem(`admin:serversOrder:${uuid}`, JSON.stringify(adminServersOrder));
+  localStorage.setItem(`nonadmin:serversOrder:${uuid}`, JSON.stringify(nonAdminServersOrder));
+}, [adminServersOrder, nonAdminServersOrder]);
+
+
+const onDragEnd = (result: DropResult ) => {
+  const { source, destination } = result;
+
+  if (!destination) {
+    return;
+  }
+
+  const newOrder = Array.from(showOnlyAdmin ? adminServersOrder : nonAdminServersOrder);
+  newOrder.splice(source.index, 1);
+  newOrder.splice(destination.index, 0, (showOnlyAdmin ? adminServersOrder : nonAdminServersOrder)[source.index]);
+
+  if (showOnlyAdmin) {
+    setAdminServersOrder(newOrder);
+    localStorage.setItem(`admin:serversOrder:${uuid}`, JSON.stringify(newOrder));
+  } else {
+    setNonAdminServersOrder(newOrder);
+    localStorage.setItem(`nonadmin:serversOrder:${uuid}`, JSON.stringify(newOrder));
+  }
+};
+
+
+const serversOrder = showOnlyAdmin ? adminServersOrder : nonAdminServersOrder;
 
   return (
     <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
