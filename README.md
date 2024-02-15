@@ -9,7 +9,7 @@
 <br>
 
 > [!IMPORTANT]
-> You must follow [https://pterodactyl.io/community/customization/panel.html](Pterodactyl Panel Customization Guide) at least once.
+> You must follow (Pterodactyl Panel Customization Guide)[https://pterodactyl.io/community/customization/panel.html] at least once.
 
 <br><br>
 
