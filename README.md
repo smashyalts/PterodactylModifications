@@ -1,31 +1,52 @@
-File Limit Changer, Pagination, and Server Sorting! for Pterodactyl
-Feel free to donate to my Paypal at: classicheroestv@gmail.com
+<h3 align="center">Pterodactyl Modifications</h3>
 
-YOU CAN NOT USE BOTH AT THE SAME Time (limit changer and pagination are incompatible with each other, they both work fine with server sorting)
-Pagination completely bypasses the file limit, and after every 250 files a new page is created  
-You need to have followed https://pterodactyl.io/community/customization/panel.html
-atleast once.
+<p align="center">Feel free to donate to my Paypal at: classicheroestv@gmail.com</p>
+
+<p align="center">Quality of Life Addons for Pterodactyl</p>
 
 
 
-Installation Guide  
-File limit changer:  
+<br>
 
-Download FileLimitChanger.sh  
-run *chmod +x FileLimitChanger.sh*  
-then run *./FileLimitChanger.sh (new filelimit)*  
-then run *yarn build:production*  
-Do this as root to have proper permissions  
+> [!IMPORTANT]
+> You must follow [https://pterodactyl.io/community/customization/panel.html](Pterodactyl Panel Customization Guide) at least once.
 
+<br><br>
 
-Pagination:  
-Download FileManagerContainer.tsx  
-Replace /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx with the downloaded file  
-then run *yarn build:production*  
-(or use the installer)
+### Installation
+Run this command:
+```
+curl -s https://raw.githubusercontent.com/smashyalts/PterodactylModifications/main/Installer.sh | bash
+```
 
-Server Sort:  
-Download DashboardContainer.tsx
-Replace /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx with the downloaded file  
-Then run: yarn add react-beautiful-dnd && yarn add @types/react-beautiful-dnd --dev && yarn build:production  
-(or use the installer)
+### Manual Installation
+<br>
+
+> [!IMPORTANT]
+> File Limit Changer & File Pagination can't be used at the same time.
+
+<br><br>
+**File Limit Changer:**
+Run the commands as Root:
+```
+wget https://raw.githubusercontent.com/smashyalts/PterodactylModifications/main/FileLimitChanger.sh
+chmod +x FileLimitChanger.sh
+./FileLimitChanger.sh (New File Limit)
+yarn build:production
+```
+
+**File Pagination:**
+Run the commands as Root:
+```
+wget https://raw.githubusercontent.com/smashyalts/PterodactylModifications/main/FileManagerContainer.tsx
+Replace /var/www/pterodactyl/resources/scripts/components/server/files/FileManagerContainer.tsx with the Downloaded File
+Run yarn build:production
+```
+
+**Server Sorter:**
+Run the commands as Root:
+```
+wget https://raw.githubusercontent.com/smashyalts/PterodactylModifications/main/DashboardContainer.tsx
+Replace /var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx with the Downloaded File
+Run yarn add react-beautiful-dnd && yarn add @types/react-beautiful-dnd --dev && yarn build:production
+```
